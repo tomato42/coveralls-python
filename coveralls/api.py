@@ -15,7 +15,7 @@ from .reporter import CoverallReporter
 log = logging.getLogger('coveralls.api')
 
 
-class Coveralls:
+class Coveralls(object):
     config_filename = '.coveralls.yml'
 
     def __init__(self, token_required=True, service_name=None, **kwargs):
@@ -181,7 +181,7 @@ class Coveralls:
                 except ImportError:
                     log.warning('PyYAML is not installed, skipping %s.',
                                 self.config_filename)
-        except OSError:
+        except (OSError, IOError):
             log.debug('Missing %s file. Using only env variables.',
                       self.config_filename)
 

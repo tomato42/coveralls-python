@@ -17,15 +17,20 @@ def run_command(*args):
         raise CoverallsException(
             'command return code {}, STDOUT: "{}"\nSTDERR: "{}"'.format(
                 cmd.returncode, stdout, stderr))
-
-    return stdout.decode().strip()
+    try:
+        return stdout.decode().strip()
+    except UnicodeDecodeError:
+        return stdout.decode('utf-8').strip()
 
 
 def gitlog(fmt):
     glog = run_command('git', '--no-pager', 'log', '-1',
                        '--pretty=format:{}'.format(fmt))
 
-    return str(glog)
+    try:
+        return str(glog)
+    except UnicodeEncodeError:
+        return unicode(glog)  # pylint: disable=undefined-variable
 
 
 def git_branch():

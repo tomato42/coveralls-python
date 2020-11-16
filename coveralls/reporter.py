@@ -9,7 +9,7 @@ from coverage.misc import NotPython
 log = logging.getLogger('coveralls.reporter')
 
 
-class CoverallReporter:
+class CoverallReporter(object):
     """Custom coverage.py reporter for coveralls.io."""
 
     def __init__(self, cov, conf):

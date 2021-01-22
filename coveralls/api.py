@@ -65,7 +65,7 @@ class Coveralls(object):
             return
 
         raise CoverallsException(
-            'Not on TravisCI. You have to provide either repo_token in {} or '
+            'Not on TravisCI. You have to provide either repo_token in {0} or '
             'set the COVERALLS_REPO_TOKEN env var.'.format(
                 self.config_filename))
 
@@ -198,7 +198,7 @@ class Coveralls(object):
         if dry_run:
             return {}
 
-        endpoint = '{}/api/v1/jobs'.format(self._coveralls_host.rstrip('/'))
+        endpoint = '{0}/api/v1/jobs'.format(self._coveralls_host.rstrip('/'))
         verify = not bool(os.environ.get('COVERALLS_SKIP_SSL_VERIFY'))
         response = requests.post(endpoint, files={'json_file': json_string},
                                  verify=verify)
@@ -206,7 +206,7 @@ class Coveralls(object):
             response.raise_for_status()
             return response.json()
         except Exception as e:
-            raise CoverallsException('Could not submit coverage: {}'.format(e))
+            raise CoverallsException('Could not submit coverage: {0}'.format(e))
 
     # https://docs.coveralls.io/parallel-build-webhook
     def parallel_finish(self):
@@ -223,18 +223,18 @@ class Coveralls(object):
             # Github Actions only
             payload['repo_name'] = os.environ.get('GITHUB_REPOSITORY')
 
-        endpoint = '{}/webhook'.format(self._coveralls_host.rstrip('/'))
+        endpoint = '{0}/webhook'.format(self._coveralls_host.rstrip('/'))
         verify = not bool(os.environ.get('COVERALLS_SKIP_SSL_VERIFY'))
         response = requests.post(endpoint, json=payload, verify=verify)
         try:
             response.raise_for_status()
             response = response.json()
         except Exception as e:
-            raise CoverallsException('Parallel finish failed: {}'.format(e))
+            raise CoverallsException('Parallel finish failed: {0}'.format(e))
 
         if 'error' in response:
             e = response['error']
-            raise CoverallsException('Parallel finish failed: {}'.format(e))
+            raise CoverallsException('Parallel finish failed: {0}'.format(e))
 
         if 'done' not in response or not response['done']:
             raise CoverallsException('Parallel finish failed')
